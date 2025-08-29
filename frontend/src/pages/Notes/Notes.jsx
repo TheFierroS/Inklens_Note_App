@@ -144,17 +144,15 @@ const Notes = () => {
     
     const fetchNotes = useCallback(async () => {
         if (!user?.id) {
-            console.log("No user ID available");
+            
             return;
         }
 
         try {
-            console.log("Fetching notes for user:", user.id);
+            
             const res = await axios.get(`${API_URL}?userId=${user.id}`);
 
-            console.log("API Response:", res.data);
-            console.log("Active notes:", res.data.activeNotes);
-            console.log("Deleted notes:", res.data.deletedNotes);
+            
 
             setNotes(res.data.activeNotes || []);
             setDeletedNotes(res.data.deletedNotes || []);
@@ -198,7 +196,7 @@ const Notes = () => {
         };
 
         try {
-            console.log("Creating new note:", note);
+            
             await axios.post(API_URL, note);
             await fetchNotes();
             setNewTitle("");
@@ -218,7 +216,7 @@ const Notes = () => {
     const handleUpdateNote = async () => {
         if (!editNote) return;
         try {
-            console.log("Updating note:", editNote._id, editNote);
+            
             await axios.put(`${API_URL}/${editNote._id}`, editNote);
             await fetchNotes();
             setEditNote(null);
@@ -230,9 +228,9 @@ const Notes = () => {
 
     const handleDeleteNote = async note => {
         try {
-            console.log("Deleting note:", note._id);
+            
             const response = await axios.delete(`${API_URL}/${note._id}`);
-            console.log("Delete response:", response.data);
+            
             await fetchNotes();
         } catch (err) {
             console.error("Delete note failed:", err);
@@ -241,9 +239,9 @@ const Notes = () => {
 
     const handleRestoreNote = async note => {
         try {
-            console.log("Restoring note:", note._id);
+            
             const response = await axios.put(`${API_URL}/${note._id}`, { deletedAt: null });
-            console.log("Restore response:", response.data);
+            
             await fetchNotes();
         } catch (err) {
             console.error("Restore note failed:", err);
@@ -252,7 +250,7 @@ const Notes = () => {
 
     const handleTogglePin = async note => {
         try {
-            console.log("Toggling pin for note:", note._id, "current pinned:", note.pinned);
+            
             await axios.put(`${API_URL}/${note._id}`, { pinned: !note.pinned });
             await fetchNotes();
         } catch (err) {
@@ -262,11 +260,10 @@ const Notes = () => {
 
     const handlePermanentDelete = async (noteId) => {
         try {
-            console.log("🔨 Permanent delete attempt for:", noteId);
-            console.log("🌐 Request URL:", `${API_URL}?permanent=true&id=${noteId}`);
+            
 
             const response = await axios.delete(`${API_URL}?permanent=true&id=${noteId}`);
-            console.log("✅ Delete successful:", response.data);
+            
 
             await fetchNotes();
         } catch (err) {
