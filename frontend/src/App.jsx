@@ -7,11 +7,11 @@ import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 
 const App = () => {
   return (
-    <KindeProvider                 //
-      clientId=" "            //
-      domain=" "             // Your Kinde İnformations
-      redirectUri=" "       //
-      logoutUri=" "        //
+    <KindeProvider                                                    //
+      clientId={import.meta.env.VITE_KINDE_CLIENT_ID || " "}         //
+      domain={import.meta.env.VITE_KINDE_DOMAIN || " "}             // Your Kinde İnformations
+      redirectUri={window.location.origin + "/notes"}              //
+      logoutUri={window.location.origin}                          //
 >
       <ThemeProvider>
         <Router>
