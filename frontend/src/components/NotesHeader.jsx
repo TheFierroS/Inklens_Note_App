@@ -46,7 +46,7 @@ const NotesHeader = () => {
             <div className="flex gap-2 md:gap-4 justify-center items-center w-full md:w-auto">
                 <DarkModeSwitch />
                 <button
-                    onClick={() => logout({ logoutRedirectURL: "http://localhost:5173" })}
+                    onClick={() => logout({ logoutRedirectURL: import.meta.env.VITE_LOGOUT_URL || window.location.origin })}
                     className="px-4 py-2 rounded-md bg-[#ff008d] text-white duration-300 hover:bg-[#cc0070] text-sm md:text-base"
                     style={{ fontFamily: 'Raleway, sans-serif' }}
                 >
