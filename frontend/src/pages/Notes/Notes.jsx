@@ -15,8 +15,8 @@ import useTheme from '../../context/useTheme';
 import NoteDetailModal from "../../components/NoteDetailModal";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/notes";
-const IMAGE_API_URL = "http://localhost:5000/api/images";
+const API_URL = "import.meta.env.VITE_API_URL || http://localhost:5000/api/notes";
+const IMAGE_API_URL = "import.meta.env.VITE_IMAGE_API_URL || http://localhost:5000/api/images";
 
 const Notes = () => {
     const { user, isLoading } = useKindeAuth();
