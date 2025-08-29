@@ -7,12 +7,12 @@ import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 
 const App = () => {
   return (
-    <KindeProvider
-      clientId="713d7969485d4cdf8c98d3a1f8cbb235"
-      domain="https://inklens.kinde.com"
-      redirectUri="http://localhost:5173/notes"
-      logoutUri="http://localhost:5173"
-    >
+    <KindeProvider                 //
+      clientId=" "            //
+      domain=" "             // Your Kinde İnformations
+      redirectUri=" "       //
+      logoutUri=" "        //
+>
       <ThemeProvider>
         <Router>
           <Routes>
