@@ -1,7 +1,7 @@
 # Inklens Note App
 
 A simple fullstack notes application built with **React**, **Express**, and **MongoDB**.  
-This project allows users to create, edit, pin, and delete notes. Deleted notes go to a **Trash** and can be permanently deleted.  
+This project allows users to create, edit, pin, delete notes and add images. Deleted notes go to a **Trash** and can be permanently deleted.
 
 ---
 
@@ -54,6 +54,9 @@ npm install
 ```ini
 MONGO_URI=YOUR_MONGO_URI
 PORT=5000
+CLOUDINARY_CLOUD_NAME=YOUR_CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY=YOUR_CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET=YOUR_CLOUDINARY_API_SECRET
 ```
 **Start the backend:**
 ```bash
@@ -83,7 +86,7 @@ npm run dev
 
 - Sign in with Kinde Auth.
 
-- Create a new note with title, content, and optional tags.
+- Create a new note with title, content, images, and optional tags.
 
 - Pin important notes to keep them at the top.
 
