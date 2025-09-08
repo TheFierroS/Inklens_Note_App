@@ -3,6 +3,7 @@ import useTheme from "../context/useTheme";
 import { FiSend } from "react-icons/fi";
 
 const API_URL = import.meta.env.VITE_BASE_API_URL || "http://localhost:5000";
+console.log("API_URL:", import.meta.env.VITE_BASE_API_URL);
 
 const PROMPTS = [
     { label: "Summarize Note", text: "This note is long, summarize it briefly." },
