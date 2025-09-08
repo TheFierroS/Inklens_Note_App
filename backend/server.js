@@ -5,7 +5,10 @@ import express from "express";
 import mongoose from "mongoose";
 import notesRouter from "./routes/notes.js";
 import imageRouter from "./routes/images.js";
+import aiRouter from "./routes/ai.js";
 import cors from "cors";
+
+
 
 
 const app = express();
@@ -18,6 +21,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use("/api/notes", notesRouter);
 app.use("/api/images", imageRouter); 
+app.use("/api/ai", aiRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

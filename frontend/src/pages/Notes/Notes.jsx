@@ -15,8 +15,8 @@ import useTheme from '../../context/useTheme';
 import NoteDetailModal from "../../components/NoteDetailModal";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/notes";
-const IMAGE_API_URL = "http://localhost:5000/api/images";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/notes";
+const IMAGE_API_URL = import.meta.env.VITE_IMAGE_API_URL || "http://localhost:5000/api/images";
 
 const Notes = () => {
     const { user, isLoading } = useKindeAuth();
@@ -42,7 +42,7 @@ const Notes = () => {
 
     const [isTrashModalOpen, setIsTrashModalOpen] = useState(false);
 
-    
+
     const handleImageUpload = async (file, isEdit = false) => {
         if (isEdit) {
             setEditUploadingImage(true);
@@ -57,7 +57,7 @@ const Notes = () => {
             const response = await axios.post(`${IMAGE_API_URL}/upload`, formData);
             const imageData = response.data;
 
-            
+
             const imageMarkdown = `\n![image](${imageData.url})\n`;
 
             if (isEdit) {
@@ -81,18 +81,18 @@ const Notes = () => {
         }
     };
 
-    
+
     const parseContentForGrid = (content) => {
         if (!content) return "";
 
-        
+
         const textOnly = content.replace(/!\[.*?\]\(.*?\)/g, '');
 
-        
+
         return textOnly.length > 80 ? textOnly.substring(0, 80) + '...' : textOnly;
     };
 
-    
+
     const renderNewContentWithImages = (content) => {
         if (!content) return <p className={`${theme === "light" ? "text-gray-400" : "text-gray-500"}`}>Content will appear here...</p>;
 
@@ -104,10 +104,7 @@ const Notes = () => {
         while ((match = imageRegex.exec(content)) !== null) {
             if (match.index > lastIndex) {
                 elements.push(
-                    <span
-                        key={`text-${lastIndex}`}
-                        className={`whitespace-pre-wrap ${theme === "light" ? "text-gray-800" : "text-gray-200"}`}
-                    >
+                    <span key={`text-${lastIndex}`} className={`whitespace-pre-wrap ${theme === "light" ? "text-gray-800" : "text-gray-200"}`}>
                         {content.substring(lastIndex, match.index)}
                     </span>
                 );
@@ -121,6 +118,7 @@ const Notes = () => {
                     src={imageUrl}
                     alt={altText || "Note image"}
                     className="max-w-full h-auto rounded my-2 max-h-32 object-contain"
+                    loading="lazy"
                 />
             );
 
@@ -129,10 +127,7 @@ const Notes = () => {
 
         if (lastIndex < content.length) {
             elements.push(
-                <span
-                    key={`text-${lastIndex}`}
-                    className={`whitespace-pre-wrap ${theme === "light" ? "text-gray-800" : "text-gray-200"}`}
-                >
+                <span key={`text-${lastIndex}`} className={`whitespace-pre-wrap ${theme === "light" ? "text-gray-800" : "text-gray-200"}`}>
                     {content.substring(lastIndex)}
                 </span>
             );
@@ -141,21 +136,14 @@ const Notes = () => {
         return <div className={`min-h-32 ${theme === "light" ? "bg-white" : "bg-[#1a001f]"}`}>{elements}</div>;
     };
 
-    
+
     const fetchNotes = useCallback(async () => {
-        if (!user?.id) {
-            console.log("No user ID available");
-            return;
-        }
+        if (!user?.id) return;
 
         try {
-            console.log("Fetching notes for user:", user.id);
             const res = await axios.get(`${API_URL}?userId=${user.id}`);
 
-            console.log("API Response:", res.data);
-            console.log("Active notes:", res.data.activeNotes);
-            console.log("Deleted notes:", res.data.deletedNotes);
-
+            
             setNotes(res.data.activeNotes || []);
             setDeletedNotes(res.data.deletedNotes || []);
         } catch (err) {
@@ -198,7 +186,6 @@ const Notes = () => {
         };
 
         try {
-            console.log("Creating new note:", note);
             await axios.post(API_URL, note);
             await fetchNotes();
             setNewTitle("");
@@ -218,7 +205,6 @@ const Notes = () => {
     const handleUpdateNote = async () => {
         if (!editNote) return;
         try {
-            console.log("Updating note:", editNote._id, editNote);
             await axios.put(`${API_URL}/${editNote._id}`, editNote);
             await fetchNotes();
             setEditNote(null);
@@ -230,9 +216,9 @@ const Notes = () => {
 
     const handleDeleteNote = async note => {
         try {
-            console.log("Deleting note:", note._id);
-            const response = await axios.delete(`${API_URL}/${note._id}`);
-            console.log("Delete response:", response.data);
+            
+            await axios.delete(`${API_URL}/${note._id}`);
+            
             await fetchNotes();
         } catch (err) {
             console.error("Delete note failed:", err);
@@ -241,9 +227,9 @@ const Notes = () => {
 
     const handleRestoreNote = async note => {
         try {
-            console.log("Restoring note:", note._id);
-            const response = await axios.put(`${API_URL}/${note._id}`, { deletedAt: null });
-            console.log("Restore response:", response.data);
+            
+            await axios.put(`${API_URL}/${note._id}`, { deletedAt: null });
+            
             await fetchNotes();
         } catch (err) {
             console.error("Restore note failed:", err);
@@ -252,7 +238,7 @@ const Notes = () => {
 
     const handleTogglePin = async note => {
         try {
-            console.log("Toggling pin for note:", note._id, "current pinned:", note.pinned);
+            
             await axios.put(`${API_URL}/${note._id}`, { pinned: !note.pinned });
             await fetchNotes();
         } catch (err) {
@@ -262,11 +248,10 @@ const Notes = () => {
 
     const handlePermanentDelete = async (noteId) => {
         try {
-            console.log("🔨 Permanent delete attempt for:", noteId);
-            console.log("🌐 Request URL:", `${API_URL}?permanent=true&id=${noteId}`);
+            
 
-            const response = await axios.delete(`${API_URL}?permanent=true&id=${noteId}`);
-            console.log("✅ Delete successful:", response.data);
+            await axios.delete(`${API_URL}?permanent=true&id=${noteId}`);
+            
 
             await fetchNotes();
         } catch (err) {
@@ -357,7 +342,7 @@ const Notes = () => {
             <NewNoteButton onClick={() => setIsNewModalOpen(true)} />
             <TrashButton onClick={() => setIsTrashModalOpen(true)} count={deletedNotes.length} />
 
-            
+
             <Modal isOpen={isNewModalOpen} onClose={() => setIsNewModalOpen(false)}>
                 <h2 className="text-xl font-bold mb-4">New Note</h2>
 
@@ -369,9 +354,9 @@ const Notes = () => {
                     onChange={e => setNewTitle(e.target.value)}
                 />
 
-                
+
                 <div className="flex flex-col md:flex-row md:gap-4 mb-2">
-                    
+
                     <textarea
                         placeholder="Content (you can use Markdown formatting)"
                         className="md:w-[48%] w-full p-2 border rounded h-36 md:h-60 resize-none"
@@ -379,7 +364,7 @@ const Notes = () => {
                         onChange={e => setNewContent(e.target.value)}
                     />
 
-                    
+
                     <div
                         className={`md:w-[48%] w-full mb-2 md:mb-0 p-2 border rounded h-36 md:h-60 overflow-y-auto 
                         ${theme === "light" ? "bg-white text-gray-800" : "bg-[#1a001f] text-gray-200"}`}
@@ -388,7 +373,7 @@ const Notes = () => {
                     </div>
                 </div>
 
-                
+
                 <div className="mb-2 flex gap-2">
                     <input
                         type="file"
@@ -423,7 +408,7 @@ const Notes = () => {
                 </button>
             </Modal>
 
-            
+
             {editNote && (
                 <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
                     <h2 className="text-xl font-bold mb-4">Edit Note</h2>
@@ -435,17 +420,17 @@ const Notes = () => {
                         onChange={e => setEditNote({ ...editNote, title: e.target.value })}
                     />
 
-                    
+
                     <div className="flex flex-col md:flex-row md:gap-4 mb-2">
-                        
+
                         <textarea
                             placeholder="Content (you can use Markdown formatting)"
                             className="md:w-[48%] w-full p-2 border rounded h-36 md:h-60 resize-none"
                             value={editNote.content}
                             onChange={e => setEditNote({ ...editNote, content: e.target.value })}
                         />
-                        
-                        
+
+
                         <div
                             className={`md:w-[48%] w-full mb-2 md:mb-0 p-2 border rounded h-36 md:h-60 overflow-y-auto 
                             ${theme === "light" ? "bg-white text-gray-800" : "bg-[#1a001f] text-gray-200"}`}
@@ -455,7 +440,7 @@ const Notes = () => {
 
                     </div>
 
-                    
+
                     <div className="mb-2 flex gap-2">
                         <input
                             type="file"
@@ -502,6 +487,7 @@ const Notes = () => {
                 note={selectedNote}
                 isOpen={!!selectedNote}
                 onClose={() => setSelectedNote(null)}
+                refreshNotes={fetchNotes} 
             />
         </div>
     );

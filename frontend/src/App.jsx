@@ -7,11 +7,11 @@ import { KindeProvider } from "@kinde-oss/kinde-auth-react";
 
 const App = () => {
   return (
-    <KindeProvider
-      clientId="713d7969485d4cdf8c98d3a1f8cbb235"
-      domain="https://inklens.kinde.com"
-      redirectUri="http://localhost:5173/notes"
-      logoutUri="http://localhost:5173"
+    <KindeProvider                                                    //
+      clientId={import.meta.env.VITE_KINDE_CLIENT_ID || " "}         //
+      domain={import.meta.env.VITE_KINDE_DOMAIN || " "}             // Your Kinde İnformations
+      redirectUri={window.location.origin + "/notes"}              //
+      logoutUri={window.location.origin}                          //
     >
       <ThemeProvider>
         <Router>
