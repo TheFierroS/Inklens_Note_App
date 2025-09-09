@@ -101,7 +101,7 @@ const NoteDetailModal = ({ note, isOpen, onClose, refreshNotes }) => {
                         className="ml-auto px-3 py-1 bg-[#ff008d] text-white rounded hover:bg-[#cc0070] w-auto flex items-center gap-1"
                     >
                         <RiRobotLine size={18} />
-                        AI
+                        Ask AI Assistant
                     </button>
                 </div>
 
