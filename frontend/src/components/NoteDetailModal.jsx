@@ -88,21 +88,21 @@ const NoteDetailModal = ({ note, isOpen, onClose, refreshNotes }) => {
                     ))}
                 </div>
 
-                <div className="flex gap-2 mt-2">
-                    <button
+                <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                      <button
                         onClick={handleCopy}
                         className="px-3 py-1 bg-[#ff008d] text-white rounded hover:bg-[#cc0070] w-auto self-start flex items-center gap-1"
-                    >
+                      >
                         Copy
-                    </button>
-
-                    <button
+                      </button>
+                    
+                      <button
                         onClick={() => setIsAiOpen(true)}
-                        className="ml-auto px-3 py-1 bg-[#ff008d] text-white rounded hover:bg-[#cc0070] w-auto flex items-center gap-1"
-                    >
+                        className="sm:ml-auto px-3 py-1 bg-[#ff008d] text-white rounded hover:bg-[#cc0070] w-auto flex items-center gap-1"
+                      >
                         <RiRobotLine size={18} />
                         Ask AI Assistant
-                    </button>
+                      </button>
                 </div>
 
                 <div className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-[#ff008d] text-white rounded shadow-lg transition-all duration-300 ${showToast ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
